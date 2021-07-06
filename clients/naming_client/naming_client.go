@@ -66,12 +66,20 @@ func NewNamingClient(nc nacos_client.INacosClient) (NamingClient, error) {
 	if err != nil {
 		return naming, err
 	}
-	err = logger.InitLogger(logger.Config{
+	loggerConfig := logger.Config{
 		Level:        clientConfig.LogLevel,
 		OutputPath:   clientConfig.LogDir,
 		RotationTime: clientConfig.RotateTime,
 		MaxAge:       clientConfig.MaxAge,
-	})
+	}
+	if clientConfig.LogSampling != nil {
+		loggerConfig.Sampling = &logger.SamplingConfig{
+			Initial:    clientConfig.LogSampling.Initial,
+			Thereafter: clientConfig.LogSampling.Thereafter,
+			Tick:       clientConfig.LogSampling.Tick,
+		}
+	}
+	err = logger.InitLogger(loggerConfig)
 	if err != nil {
 		return naming, err
 	}

@@ -19,6 +19,7 @@ package constant
 import (
 	"os"
 	"testing"
+	"time"
 
 	"github.com/nacos-group/nacos-sdk-go/common/file"
 
@@ -50,6 +51,7 @@ func TestNewClientConfig(t *testing.T) {
 	assert.Equal(t, config.RegionId, "")
 	assert.Equal(t, config.AccessKey, "")
 	assert.Equal(t, config.SecretKey, "")
+	assert.Nil(t, config.LogSampling)
 }
 
 func TestNewClientConfigWithOptions(t *testing.T) {
@@ -75,6 +77,8 @@ func TestNewClientConfigWithOptions(t *testing.T) {
 		WithNamespaceId("namespace_1"),
 		WithAccessKey("accessKey_1"),
 		WithSecretKey("secretKey_1"),
+
+		WithLogSampling(time.Second*10, 5, 10),
 	)
 
 	assert.Equal(t, config.TimeoutMs, uint64(20000))
@@ -98,4 +102,8 @@ func TestNewClientConfigWithOptions(t *testing.T) {
 	assert.Equal(t, config.NamespaceId, "namespace_1")
 	assert.Equal(t, config.AccessKey, "accessKey_1")
 	assert.Equal(t, config.SecretKey, "secretKey_1")
+
+	assert.Equal(t, config.LogSampling.Tick, time.Second*10)
+	assert.Equal(t, config.LogSampling.Initial, 5)
+	assert.Equal(t, config.LogSampling.Thereafter, 10)
 }

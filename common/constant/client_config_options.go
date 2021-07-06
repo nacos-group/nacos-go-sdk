@@ -18,6 +18,7 @@ package constant
 
 import (
 	"os"
+	"time"
 
 	"github.com/nacos-group/nacos-sdk-go/common/file"
 )
@@ -170,5 +171,12 @@ func WithMaxAge(maxAge int64) ClientOption {
 func WithLogLevel(logLevel string) ClientOption {
 	return func(config *ClientConfig) {
 		config.LogLevel = logLevel
+	}
+}
+
+// WithLogSampling ...
+func WithLogSampling(tick time.Duration, initial int, thereafter int) ClientOption {
+	return func(config *ClientConfig) {
+		config.LogSampling = &ClientLogSamplingConfig{initial, thereafter, tick}
 	}
 }

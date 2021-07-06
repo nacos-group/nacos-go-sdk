@@ -46,6 +46,13 @@ type Config struct {
 	OutputPath   string
 	RotationTime string
 	MaxAge       int64
+	Sampling     *SamplingConfig
+}
+
+type SamplingConfig struct {
+	Initial    int
+	Thereafter int
+	Tick       time.Duration
 }
 
 type NacosLogger struct {
@@ -101,6 +108,9 @@ func InitNacosLogger(config Config) (Logger, error) {
 		return nil, err
 	}
 	core := zapcore.NewCore(zapcore.NewConsoleEncoder(encoder), zapcore.AddSync(writer), logLevel)
+	if config.Sampling != nil {
+		core = zapcore.NewSamplerWithOptions(core, config.Sampling.Tick, config.Sampling.Initial, config.Sampling.Thereafter)
+	}
 	zaplogger := zap.New(core, zap.AddCallerSkip(1))
 	return &NacosLogger{zaplogger.Sugar()}, nil
 }
