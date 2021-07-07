@@ -265,7 +265,7 @@ err := namingClient.Subscribe(vo.SubscribeParam{
     ServiceName: "demo.go",
     GroupName:   "group-a",             // 默认值DEFAULT_GROUP
     Clusters:    []string{"cluster-a"}, // 默认值DEFAULT
-    SubscribeCallback: func(services []model.SubscribeService, err error) {
+    SubscribeCallback: func(services []model.Instance, err error) {
         log.Printf("\n\n callback return services:%s \n\n", utils.ToJsonString(services))
     },
 })
@@ -280,7 +280,7 @@ err := namingClient.Unsubscribe(vo.SubscribeParam{
     ServiceName: "demo.go",
     GroupName:   "group-a",             // 默认值DEFAULT_GROUP
     Clusters:    []string{"cluster-a"}, // 默认值DEFAULT
-    SubscribeCallback: func(services []model.SubscribeService, err error) {
+    SubscribeCallback: func(services []model.Instance, err error) {
         log.Printf("\n\n callback return services:%s \n\n", utils.ToJsonString(services))
     },
 })
@@ -290,7 +290,7 @@ err := namingClient.Unsubscribe(vo.SubscribeParam{
 * 获取服务名列表:GetAllServicesInfo
 ```go
 
-serviceInfos, err := client.GetAllServicesInfo(vo.GetAllServiceInfoParam{
+serviceInfos, err := namingClient.GetAllServicesInfo(vo.GetAllServiceInfoParam{
     NameSpace: "0e83cc81-9d8c-4bb8-a28a-ff703187543f",
     PageNo:   1,
     PageSize: 10,
